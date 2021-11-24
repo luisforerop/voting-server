@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minichat</title>
+</head>
+<body>
+  <h1>MINICHAT</h1>
+  <form action="" id="sendMessage" autocomplete="off">
+    <input type="text" name="" id="message">
+    <button type="submit">
+      Enviar
+    </button>
+  </form>
+  <ul id="incomingMessage">
+
+  </ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const messageForm = document.querySelector('#sendMessage')
+    const messageContainer = document.querySelector('#incomingMessage')
+    const messageInput = document.querySelector('#message')
+
+    const socket = io();
+
+    messageForm.addEventListener('submit', (ev) => {
+      ev.preventDefault()
+      console.log(ev);
+      socket.emit('message-client-to-server', messageInput.value)
+      messageInput.value = ''
+    })
+
+    socket.on('message-server-to-client', (e)=> {
+      messageContainer.innerHTML += `
+        <li>${e.msg}</li>
+      `
+    })
+
+  </script>
+</body>
+</html>
